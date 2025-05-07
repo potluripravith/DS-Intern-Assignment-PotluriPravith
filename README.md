@@ -2,115 +2,99 @@
 
 ## Problem Overview
 
-You've been hired as a data scientist for SmartManufacture Inc., a leading industrial automation company. The company has deployed an extensive sensor network throughout one of their client's manufacturing facilities to monitor environmental conditions and energy usage.
+This project focuses on predicting equipment energy consumption in a smart factory using machine learning. The goal is to:
+1) Clean and preprocess sensor data.
+2) Identify key factors affecting energy usage.
+3) Build and evaluate predictive models.
+4) Provide actionable insights to reduce energy consumption.
 
-The client is concerned about the increasing energy costs associated with their manufacturing equipment. They want to implement a predictive system that can forecast equipment energy consumption based on various environmental factors and sensor readings from different zones of the factory.
-
-## Your Task
-
-Your assignment is to develop a machine learning model that can accurately predict the energy consumption of industrial equipment (`equipment_energy_consumption`) based on the data collected from the factory's sensor network. This will help the facility managers optimize their operations for energy efficiency and cost reduction.
-
-### Specific Goals:
-
-1. Analyze the provided sensor data to identify patterns and relationships between environmental factors and equipment energy consumption
-2. Build a robust regression model to predict equipment energy consumption
-3. Evaluate the model's performance using appropriate metrics
-4. Provide actionable insights and recommendations for reducing energy consumption
 
 ## Repository Structure
 
 This repository is organized as follows:
 
 ```
-.
-├── data/               # Contains the training and test datasets
-│   ├── data.csv        # dataset
+│── data/  
+│   └── data.csv        # Raw dataset 
 ├── docs/               # Documentation files
-│   └── data_description.md  # Detailed description of all features
-└── README.md           # This file
+│   └── data_description.md  # Detailed description of all features                 
+│── smart_factory_energy_prediction.py  # Main Python script  
+│── README.md                    # This file  
+```
+## 🔧 Installation & Setup
+
+### Prerequisites
+- Python 3.8+
+
+### Required Libraries
+
+Install the necessary libraries using pip:
+
+```bash
+pip install pandas numpy scikit-learn matplotlib seaborn xgboost
 ```
 
-## Dataset Description
+### How to Run 
+Follow these steps to run the project:
+1) Clone the repository:
 
-The data comes from a manufacturing facility equipped with multiple sensors that collect environmental measurements. Each record contains:
+```bash
+git clone https://github.com/potluripravith/DS-Intern-Assignment-PotluriPravith.git
+```
+2) Navigate to the project directory:
+```bash
+cd DS-Intern-Assignment-PotluriPravith
+```
+3) Run the script:
+```bash
+python smart_factory_energy_prediction.py
+```
+##  Key Steps in the Analysis
 
-- Timestamp of the measurement
-- Energy consumption readings for equipment and lighting
-- Temperature and humidity readings from 9 different zones in the facility
-- Outdoor weather conditions (temperature, humidity, pressure, etc.)
-- Additional measurements and calculated variables
+### 1. Data Cleaning & Preprocessing
+-  Handled missing values using **time-based interpolation**.
+-  Removed **negative energy readings** caused by sensor errors.
+-  Capped **outliers using the IQR method** to reduce skewness.
 
-### Notes on Feature Selection and Random Variables
+### 2. Feature Engineering
+-  Created **temperature differential features** (e.g., `zoneX_temp - outdoor_temp`) to better reflect HVAC workload.
+-  Computed **rolling statistics** (4-hour mean & standard deviation) to capture short-term trends in energy usage.
 
-The dataset includes two variables named `random_variable1` and `random_variable2`. Part of your task is to determine, through proper data analysis and feature selection techniques, whether these variables should be included in your model or not. This mimics real-world scenarios where not all available data is necessarily useful for prediction.
+### 3. Model Training & Evaluation
+-  Evaluated the following **six regression models**:
+  - Linear Regression
+  - Ridge Regression
+  - Lasso Regression
+  - Random Forest Regressor
+  - Gradient Boosting Regressor
+  - XGBoost Regressor
+###  Model Performance Comparison
 
-Your approach to handling these variables should be clearly documented and justified in your analysis. This will be an important part of evaluating your feature selection methodology.
+| Model               | RMSE  | MAE   | R²   |
+|---------------------|-------|-------|------|
+| Gradient Boosting   | 19.48 | 12.30 | 0.77 |
+| Linear Regression   | 19.87 | 12.56 | 0.76 |
+| Ridge Regression    | 19.87 | 12.56 | 0.76 |
+| Lasso Regression    | 19.87 | 12.55 | 0.76 |
+| Random Forest       | 20.05 | 12.47 | 0.76 |
+| XGBoost             | 21.28 | 12.83 | 0.73 |
 
-Note that your final solution will also be evaluated on a separate holdout dataset that we maintain privately, which serves as an additional check on your model's generalization capability.
+---
 
-For a detailed description of all features, please refer to the [data description document](docs/data_description.md).
+## Results & Insights
 
-## Deliverables
+### 🔍 Top Findings
+-  **Temperature control** has a significant impact on overall energy consumption.
+-  **Time-based features**, such as hour of the day and rolling averages, greatly improve model accuracy.
+-  **Sensor anomalies** (e.g., negative readings or extreme spikes) are likely indicators of malfunctioning equipment.
 
-Your submission should include:
+## Recommendations
+1) Reduce temperature differentials between zones and outdoors.
+2) Monitor high-consumption periods (rolling mean helps detect anomalies).
+3) Add more sensor data (equipment status, production load).
 
-1. **A well-documented Jupyter notebook** containing:
-   - Exploratory data analysis (EDA)
-   - Data preprocessing steps
-   - Feature engineering and selection
-   - Model development and training
-   - Model evaluation and testing
-   - Key findings and insights
-
-2. **Python script(s)/notebook(s)** with your final model implementation
-
-3. **A brief report (PDF or Markdown format)** summarizing:
-   - Your approach to the problem
-   - Key insights from the data
-   - Model performance evaluation
-   - Recommendations for reducing equipment energy consumption
-
-## Evaluation Criteria
-
-Your solution will be evaluated based on:
-
-1. **Code Quality and Structure (25%)**
-   - Clean, well-organized, and properly documented code
-   - Appropriate use of functions and classes
-   - Effective use of Git with meaningful commit messages
-   - Code readability and adherence to Python conventions
-
-2. **Data Analysis and Preprocessing (25%)**
-   - Thoroughness of exploratory data analysis
-   - Handling of missing values, outliers, and data transformations
-   - Feature engineering creativity and effectiveness
-   - Proper data splitting methodology
-
-3. **Model Development (25%)**
-   - Selection and justification of algorithms
-   - Hyperparameter tuning approach
-   - Implementation of cross-validation
-   - Model interpretability considerations
-
-4. **Results and Insights (25%)**
-   - Model performance metrics (RMSE, MAE, R²) on both the test dataset and our private holdout dataset
-   - Quality of visualizations and explanations
-   - Practical insights and recommendations
-   - Critical evaluation of model limitations
-
-## Submission Instructions
-
-1. Fork this repository to your own GitHub account, naming it `DS-Intern-Assignment-[YourName]` (replace `[YourName]` with your actual name)
-2. Clone your forked repository to your local machine
-3. Make regular, meaningful commits as you develop your solution
-4. Push your changes to your forked repository
-5. Once complete, submit the URL of your forked repository via replying to the mail.
-
-Your commit history will be reviewed as part of the evaluation, so make sure to commit regularly and include meaningful commit messages that reflect your development process.
-
-## Time Commitment
-
-This assignment is designed to be completed in approximately 4-6 hours.
-Deadline is 48 hours/2 days from when you receive the assignment.
-
-Good luck!
+## Conclusion
+The Gradient Boosting model (R²=0.77) provides reliable predictions for energy consumption. Key takeaways:
+1) Temperature management is crucial for reducing energy use.
+2) Time-based features improve prediction accuracy.
+3) Real-time monitoring can help optimize energy efficiency.
